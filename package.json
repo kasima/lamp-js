@@ -4,7 +4,9 @@
   , "private": true
   , "dependencies": {
       "express": "2.5.8"
-    , "vows": "0.6.2"
     , "jade": ">= 0.0.1"
+    , "express-resource": ""
+    , "coffee-script": ""
+    , "mocha": ""
   }
 }
