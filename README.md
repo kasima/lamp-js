@@ -1,0 +1,3 @@
+# LAMP #
+
+The Lamp Project
