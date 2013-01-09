@@ -4,18 +4,27 @@ exports.index = (req, res) ->
   res.render('index', { title: 'Express' })
 
 exports.letters = (req, res) ->
-  letters = Letter.find {'unlocked': true}, (err, docs) ->
+  Letter.find {'unlocked': true}, (err, docs) ->
     res.writeHead 200, {"Content-Type": "text/json"}
     res.write JSON.stringify(docs)
     res.end()
 
 exports.unlock = (req, res) ->
-  console.log req.params
-  debugger
-  console.log req
-  # letter = Letter.find {'_id': }
-  # letter.save()
+  Letter.findOne
+    '_id': req.params.id
+    'key': req.body.key
+  , (err, letter) ->
+    if letter
+      if req.body.foundBy? && req.body.foundLocation?
+        letter.foundBy = req.body.foundBy
+        letter.foundLocation = req.body.foundLocation
+        letter.foundDate = new Date
+        letter.save()
+        res.writeHead 200, {"Content-Type": "text/json"}
+        res.write JSON.stringify(letter)
+      else
+        res.writeHead 422
+    else
+      res.writeHead 404
 
-  # res.writeHead 200, {"Content-Type": "text/json"}
-  # res.write JSON.stringify(letter)
-  # res.end()
+    res.end()

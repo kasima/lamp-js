@@ -9,9 +9,9 @@ Letter.add
   imageUrl: String
   soundUrl: String
   unlocked: Boolean
-  foundBy: String
-  foundDate: Date
-  foundLocation: String
   type: String
+  foundBy: String
+  foundLocation: String
+  foundDate: Date
 
 module.exports = mongoose.model('Letter', Letter)

@@ -13,6 +13,7 @@
     , "mongodb": ""
     , "mongoose": ""
     , "express": "2.5.8"
+    , "async": ""
     , "mocha": ""
     , "should": ""
     , "supertest": ""
