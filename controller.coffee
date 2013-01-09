@@ -1,7 +1,7 @@
 Letter = require './letter'
 
 exports.index = (req, res) ->
-  res.render('index', { title: 'Express' })
+  res.redirect('http://olganunes.com/')
 
 exports.letters = (req, res) ->
   Letter.find {'unlocked': true}, (err, docs) ->
