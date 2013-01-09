@@ -9,10 +9,12 @@
   },
 
   "dependencies": {
-    "express": "2.5.8",
-    "jade": ">= 0.0.1",
-    "express-resource": "",
-    "coffee-script": "",
-    "mocha": ""
+      "coffee-script": ""
+    , "mongodb": ""
+    , "mongoose": ""
+    , "express": "2.5.8"
+    , "mocha": ""
+    , "should": ""
+    , "supertest": ""
   }
 }
