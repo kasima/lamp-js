@@ -7,16 +7,23 @@ class Lamp
     $.ajax
       url: server + '/letters'
       type: 'GET'
-      crossDomain: true
-      # dataType: 'jsonp'
-      # processData: false,
-      # contentType: "application/json",
-      # jsonp: false,
 
       success: (data, status, xhr) ->
         opts.success(data, status, xhr) if opts.success?
       error: (xhr, status) ->
         opts.error(xhr, status) if opts.error?
+
+
+  count: (opts={}) ->
+    $.ajax
+      url: server + '/letters/count'
+      type: 'GET'
+
+      success: (data, status, xhr) ->
+        opts.success(data, status, xhr) if opts.success?
+      error: (xhr, status) ->
+        opts.error(xhr, status) if opts.error?
+
 
   letter: (id, opts={}) ->
     $.ajax
@@ -28,10 +35,11 @@ class Lamp
       error: (xhr, status) ->
         opts.error(xhr, status) if opts.error?
 
-  unlock: (id, foundBy, foundLocation, opts={}) ->
+  unlock: (id, key, foundBy, foundLocation, opts={}) ->
     $.ajax
       url: server + '/letters/' + id + '/unlock'
       data:
+        key: key
         foundBy: foundBy
         foundLocation: foundLocation
       type: 'POST'

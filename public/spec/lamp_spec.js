@@ -25,7 +25,7 @@
     describe(".count", function() {
       beforeEach(function() {
         var _this = this;
-        this.lamp.letters({
+        this.lamp.count({
           success: function(json) {
             return _this.json = json;
           }

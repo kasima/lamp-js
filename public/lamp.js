@@ -17,7 +17,26 @@
       return $.ajax({
         url: server + '/letters',
         type: 'GET',
-        crossDomain: true,
+        success: function(data, status, xhr) {
+          if (opts.success != null) {
+            return opts.success(data, status, xhr);
+          }
+        },
+        error: function(xhr, status) {
+          if (opts.error != null) {
+            return opts.error(xhr, status);
+          }
+        }
+      });
+    };
+
+    Lamp.prototype.count = function(opts) {
+      if (opts == null) {
+        opts = {};
+      }
+      return $.ajax({
+        url: server + '/letters/count',
+        type: 'GET',
         success: function(data, status, xhr) {
           if (opts.success != null) {
             return opts.success(data, status, xhr);
@@ -51,13 +70,14 @@
       });
     };
 
-    Lamp.prototype.unlock = function(id, foundBy, foundLocation, opts) {
+    Lamp.prototype.unlock = function(id, key, foundBy, foundLocation, opts) {
       if (opts == null) {
         opts = {};
       }
       return $.ajax({
         url: server + '/letters/' + id + '/unlock',
         data: {
+          key: key,
           foundBy: foundBy,
           foundLocation: foundLocation
         },

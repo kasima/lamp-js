@@ -5,7 +5,8 @@ Letter = require './letter'
 writeJSONCallback = (res) ->
   (err, obj) ->
     if err?
-      res.writeHead 422
+      res.writeHead 422,
+        'Access-Control-Allow-Origin': '*'
     else
       res.writeHead 200,
         "Content-Type": "text/json"
@@ -48,7 +49,8 @@ exports.letter = (req, res) ->
     if letter
       writeJSONCallback(res)(err, letter)
     else
-      res.writeHead 404
+      res.writeHead 404,
+        'Access-Control-Allow-Origin': '*'
       res.end()
 
 exports.unlock = (req, res) ->
@@ -66,9 +68,11 @@ exports.unlock = (req, res) ->
         letter.save writeJSONCallback(res)
       else
         # no finder info posted
-        res.writeHead 422
+        res.writeHead 422,
+          'Access-Control-Allow-Origin': '*'
         res.end()
     else
       # no letter
-      res.writeHead 404
+      res.writeHead 404,
+        'Access-Control-Allow-Origin': '*'
       res.end()

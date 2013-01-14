@@ -16,7 +16,7 @@ describe "Lamp", ->
 
   describe ".count", ->
     beforeEach ->
-      @lamp.letters
+      @lamp.count
         success: (json) =>
           @json = json
       @request = mostRecentAjaxRequest()
