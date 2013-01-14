@@ -1,3 +1,5 @@
+_      = require 'underscore'
+async  = require 'async'
 Letter = require './letter'
 
 writeJSONCallback = (res) ->
@@ -6,6 +8,7 @@ writeJSONCallback = (res) ->
       res.writeHead 422
     else
       res.writeHead 200, {"Content-Type": "text/json"}
+      # console.log JSON.stringify obj
       res.write JSON.stringify(obj)
     res.end()
 
@@ -13,7 +16,38 @@ exports.index = (req, res) ->
   res.redirect('http://olganunes.com/')
 
 exports.letters = (req, res) ->
-  Letter.unlocked writeJSONCallback(res)
+  Letter.unlocked (err, letters) ->
+    flattened = _.map letters
+    , (letter) ->
+      letter.flat()
+    writeJSONCallback(res)(err, flattened)
+
+exports.count = (req, res) ->
+  locked = unlocked = null
+  async.parallel [
+    (callback) ->
+      Letter.count {unlocked: true}, (err, count) ->
+        unlocked = count
+        callback()
+    (callback) ->
+      Letter.count {unlocked: false}, (err, count) ->
+        locked = count
+        callback()
+  ]
+  , ->
+    json = {locked: locked, unlocked: unlocked}
+    writeJSONCallback(res)(null, json)
+
+exports.letter = (req, res) ->
+  Letter.findOne
+    'id': req.params.id
+    'unlocked': true
+  , (err, letter) ->
+    if letter
+      writeJSONCallback(res)(err, letter)
+    else
+      res.writeHead 404
+      res.end()
 
 exports.unlock = (req, res) ->
   Letter.findOne

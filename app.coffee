@@ -26,6 +26,8 @@ app.configure 'production', ->
 
 app.get '/', controller.index
 app.get '/letters', controller.letters
+app.get '/letters/count', controller.count
+app.get '/letters/:id', controller.letter
 app.post '/letters/:id/unlock', controller.unlock
 
 

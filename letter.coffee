@@ -9,7 +9,9 @@ LetterSchema = new Schema
   key:
     type: String
     index: true
-  unlocked: Boolean
+  unlocked:
+    type: Boolean
+    default: false
   finders: [{
     foundBy: String
     foundLocation: String
@@ -37,9 +39,9 @@ LetterSchema.methods.flat = ->
     key: @key
     unlocked: @unlocked
     data: @data
-    foundBy: finder.foundBy
-    foundLocation: finder.foundLocation
-    foundDate: finder.foundDate
+    foundBy: finder? && finder.foundBy || ''
+    foundLocation: finder? && finder.foundLocation || ''
+    foundDate: finder? && finder.foundDate || ''
     foundCount: @finders.length
   }
 

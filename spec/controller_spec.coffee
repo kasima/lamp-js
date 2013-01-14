@@ -5,7 +5,7 @@ async       = require 'async'
 app         = require '../app'
 Letter      = require '../letter'
 
-describe 'letter', ->
+describe 'controller', ->
   fixtures = [
     { id: 1, unlocked: true }
     { id: 2, unlocked: true }
@@ -28,24 +28,67 @@ describe 'letter', ->
 
   describe 'GET /letters', ->
     it 'returns unlocked letters JSON', (done) ->
-      that = this
       request(app)
         .get('/letters')
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
         .end (err, res) ->
-          return done(err) if err
+          throw err if err
           results = JSON.parse(res.text)
           results.length.should.equal 2
           done()
           # includes the first person who unlocked and a count of unlockers
 
   describe 'GET /letters/:id', ->
-    # Includes a list of all finders
+    beforeEach (done) ->
+      async.parallel [
+        (callback) =>
+          Letter.findOne { unlocked: false }, (err, doc) =>
+            @locked = doc
+            callback()
+        (callback) =>
+          Letter.findOne { unlocked: true }, (err, doc) =>
+            @unlocked = doc
+            callback()
+      ]
+      , done
+
+    describe "with an unlocked id", ->
+      it "returns a json of the letter with the list of all finders", (done) ->
+        request(app)
+          .get('/letters/' + @unlocked.id)
+          .set('Accept', 'application/json')
+          .expect('Content-Type', /json/)
+          .expect(200)
+          .end (err, res) =>
+            throw err if err
+            results = JSON.parse(res.text)
+            results.id.should.equal @unlocked.id
+            results.finders.should.be.defined
+            done()
+
+    describe "with a locked id", ->
+      it "returns a 404", (done) ->
+        request(app)
+          .get('/letters/' + @locked.id)
+          .set('Accept', 'application/json')
+          .expect(404)
+          .end done
 
   describe 'GET /letters/count', ->
-    # Returns locked and unlocked count
+    it "return a json with the locked and unlocked count", (done) ->
+      request(app)
+        .get('/letters/count')
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end (err, res) =>
+          throw err if err
+          results = JSON.parse(res.text)
+          results.locked.should.equal 1
+          results.unlocked.should.equal 2
+          done()
 
   describe 'POST /letters/:id/unlock', ->
     beforeEach (done) ->
