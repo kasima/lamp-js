@@ -3,13 +3,17 @@ MOCHA = ./node_modules/.bin/mocha \
 					--compilers coffee:coffee-script \
 					--require should
 
-TESTS = controller_spec.coffee
-DEBUG = --debug
+TESTS = spec
+DEBUG = debug
+WATCH = --watch
 
 test:
 	$(MOCHA) $(TESTS)
 
 test-debug:
-	$(MOCHA) $(TESTS) $(DEBUG)
+	$(MOCHA) $(DEBUG) $(TESTS)
+
+test-watch:
+	$(MOCHA) $(WATCH) $(TESTS)
 
 .PHONY: test

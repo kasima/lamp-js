@@ -24,16 +24,19 @@ app.configure 'production', ->
 
 # Routes
 
-app.get('/', controller.index)
-app.get('/letters', controller.letters)
-app.post('/letters/:id/unlock', controller.unlock)
+app.get '/', controller.index
+app.get '/letters', controller.letters
+app.post '/letters/:id/unlock', controller.unlock
+
 
 # DB
 
 db = process.env.MONGOLAB_URI || 'mongodb://localhost/lamp'
 mongoose.connect(db)
 
+
 # Start Express
+
 port = process.env.PORT || 3000
 if !module.parent
   app.listen port, ->

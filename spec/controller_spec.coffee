@@ -1,11 +1,9 @@
-request  = require 'supertest'
-mongoose = require 'mongoose'
-async    = require 'async'
-app      = require './app'
-Letter   = require './letter'
+require '../spec_helper'
 
-db = 'mongodb://localhost/lamp-tests'
-mongoose.connect(db)
+request     = require 'supertest'
+async       = require 'async'
+app         = require '../app'
+Letter      = require '../letter'
 
 describe 'letter', ->
   fixtures = [
@@ -16,10 +14,12 @@ describe 'letter', ->
 
   beforeEach (done) ->
     Letter.find {}, (err, docs) ->
+      # clear db
       async.map docs
       , (doc, callback) ->
         doc.remove callback
       , ->
+        # create fixtures
         async.map fixtures
         , (attr, callback) ->
           letter = new Letter attr
@@ -39,6 +39,13 @@ describe 'letter', ->
           results = JSON.parse(res.text)
           results.length.should.equal 2
           done()
+          # includes the first person who unlocked and a count of unlockers
+
+  describe 'GET /letters/:id', ->
+    # Includes a list of all finders
+
+  describe 'GET /letters/count', ->
+    # Returns locked and unlocked count
 
   describe 'POST /letters/:id/unlock', ->
     beforeEach (done) ->
@@ -58,10 +65,11 @@ describe 'letter', ->
           .expect('Content-Type', /json/)
           .expect(200)
           .end (err, res) ->
+            throw err if err
             result = JSON.parse(res.text)
-            result.foundBy.should.equal 'Joey'
-            result.foundLocation.should.equal 'The Park'
-            result.should.have.property 'foundDate'
+            result.unlocked.should.be.true
+            result.finders[0].foundBy.should.equal 'Joey'
+            result.finders[0].foundDate.should.exist
             done()
 
       describe 'with missing fields', ->

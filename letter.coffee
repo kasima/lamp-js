@@ -1,17 +1,46 @@
-mongoose = require('mongoose')
-Schema = mongoose.Schema
+_        = require 'underscore'
+mongoose = require 'mongoose'
+Schema   = mongoose.Schema
 
-Letter = new Schema()
-Letter.add
+LetterSchema = new Schema
+  id:
+    type: String
+    index: true
   key:
     type: String
     index: true
-  imageUrl: String
-  soundUrl: String
   unlocked: Boolean
-  type: String
-  foundBy: String
-  foundLocation: String
-  foundDate: Date
+  finders: [{
+    foundBy: String
+    foundLocation: String
+    foundDate:
+      type: Date
+      default: Date.now
+  }]
+  data: Schema.Types.Mixed
 
-module.exports = mongoose.model('Letter', Letter)
+LetterSchema.statics.unlocked = (callback) ->
+  this.find {'unlocked': true}, callback
+
+LetterSchema.methods.appendFinder = (finder) ->
+  this.finders.push finder
+
+LetterSchema.methods.flat = ->
+  sorted = _.sortBy @finders
+  , (finder) ->
+    finder.foundDate
+  finder = _.first sorted
+
+  return {
+    _id: @_id
+    id: @id
+    key: @key
+    unlocked: @unlocked
+    data: @data
+    foundBy: finder.foundBy
+    foundLocation: finder.foundLocation
+    foundDate: finder.foundDate
+    foundCount: @finders.length
+  }
+
+module.exports = mongoose.model('Letter', LetterSchema)
