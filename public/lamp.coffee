@@ -3,17 +3,22 @@ $ = jQuery
 server = 'http://lamp-an-olga-joint.herokuapp.com'
 
 class Lamp
-  letters: (opts) ->
+  letters: (opts={}) ->
     $.ajax
       url: server + '/letters'
       type: 'GET'
+      crossDomain: true
+      # dataType: 'jsonp'
+      # processData: false,
+      # contentType: "application/json",
+      # jsonp: false,
 
       success: (data, status, xhr) ->
         opts.success(data, status, xhr) if opts.success?
       error: (xhr, status) ->
         opts.error(xhr, status) if opts.error?
 
-  letter: (id, opts) ->
+  letter: (id, opts={}) ->
     $.ajax
       url: server + '/letters/' + id
       type: 'GET'
@@ -23,7 +28,7 @@ class Lamp
       error: (xhr, status) ->
         opts.error(xhr, status) if opts.error?
 
-  unlock: (id, foundBy, foundLocation, opts) ->
+  unlock: (id, foundBy, foundLocation, opts={}) ->
     $.ajax
       url: server + '/letters/' + id + '/unlock'
       data:

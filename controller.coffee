@@ -7,7 +7,9 @@ writeJSONCallback = (res) ->
     if err?
       res.writeHead 422
     else
-      res.writeHead 200, {"Content-Type": "text/json"}
+      res.writeHead 200,
+        "Content-Type": "text/json"
+        'Access-Control-Allow-Origin': '*'
       # console.log JSON.stringify obj
       res.write JSON.stringify(obj)
     res.end()

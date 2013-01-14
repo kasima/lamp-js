@@ -11,9 +11,13 @@
     function Lamp() {}
 
     Lamp.prototype.letters = function(opts) {
+      if (opts == null) {
+        opts = {};
+      }
       return $.ajax({
         url: server + '/letters',
         type: 'GET',
+        crossDomain: true,
         success: function(data, status, xhr) {
           if (opts.success != null) {
             return opts.success(data, status, xhr);
@@ -28,6 +32,9 @@
     };
 
     Lamp.prototype.letter = function(id, opts) {
+      if (opts == null) {
+        opts = {};
+      }
       return $.ajax({
         url: server + '/letters/' + id,
         type: 'GET',
@@ -45,6 +52,9 @@
     };
 
     Lamp.prototype.unlock = function(id, foundBy, foundLocation, opts) {
+      if (opts == null) {
+        opts = {};
+      }
       return $.ajax({
         url: server + '/letters/' + id + '/unlock',
         data: {
