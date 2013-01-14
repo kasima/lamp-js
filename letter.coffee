@@ -6,9 +6,11 @@ LetterSchema = new Schema
   id:
     type: String
     index: true
+    default: ''
   key:
     type: String
     index: true
+    default: ''
   unlocked:
     type: Boolean
     default: false
@@ -19,7 +21,9 @@ LetterSchema = new Schema
       type: Date
       default: Date.now
   }]
-  data: Schema.Types.Mixed
+  data:
+    type: Schema.Types.Mixed
+    default: {}
 
 LetterSchema.statics.unlocked = (callback) ->
   this.find {'unlocked': true}, callback
