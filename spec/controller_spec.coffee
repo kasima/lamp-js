@@ -7,9 +7,9 @@ Letter      = require '../letter'
 
 describe 'letter', ->
   fixtures = [
-    { unlocked: true }
-    { unlocked: true }
-    { key: 'correct', unlocked: false }
+    { id: 1, unlocked: true }
+    { id: 2, unlocked: true }
+    { id: 3, key: 'correct', unlocked: false }
   ]
 
   beforeEach (done) ->
@@ -56,7 +56,7 @@ describe 'letter', ->
     describe 'with the correct key', ->
       it 'returns the unlocked letter', (done) ->
         request(app)
-          .post('/letters/' + @locked._id + '/unlock')
+          .post('/letters/' + @locked.id + '/unlock')
           .send
             key: 'correct'
             foundBy: 'Joey'
@@ -75,7 +75,7 @@ describe 'letter', ->
       describe 'with missing fields', ->
         it 'returns 422', (done) ->
           request(app)
-            .post('/letters/' + @locked._id + '/unlock')
+            .post('/letters/' + @locked.id + '/unlock')
             .send
               key: 'correct'
             .expect(422)
@@ -84,7 +84,7 @@ describe 'letter', ->
     describe 'with an incorrect key', ->
       it 'returns a 404', (done) ->
         request(app)
-          .post('/letters/' + @locked._id + '/unlock')
+          .post('/letters/' + @locked.id + '/unlock')
           .send
             key: 'incorrect'
           .expect(404, done)

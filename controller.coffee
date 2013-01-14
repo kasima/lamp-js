@@ -17,7 +17,7 @@ exports.letters = (req, res) ->
 
 exports.unlock = (req, res) ->
   Letter.findOne
-    '_id': req.params.id
+    'id': req.params.id
     'key': req.body.key
   , (err, letter) ->
     if letter
