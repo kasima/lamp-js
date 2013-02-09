@@ -18,5 +18,6 @@
     , "should": ""
     , "supertest": ""
     , "underscore": ""
+    , "newrelic" : ""
   }
 }

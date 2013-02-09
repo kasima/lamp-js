@@ -2,6 +2,7 @@
 
 mongoose   = require 'mongoose'
 express    = require 'express'
+newrelic   = require 'newrelic'
 controller = require './controller'
 
 app = module.exports = express.createServer()
