@@ -1,3 +1,3 @@
 # LAMP #
 
-The Lamp Project
+Backend for [http://thisletterislost.com](http://thisletterislost.com)
